@@ -4,7 +4,8 @@ import joblib
 import os
 from sklearn.exceptions import NotFittedError
 
-MODEL_PATH = "models/best_rf_pipeline.joblib"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "best_rf_pipeline.joblib")
 
 INPUT_FIELDS = [
     ("PCM_pct", "PCM percentage"),
@@ -36,7 +37,7 @@ def load_model():
 
 try:
     model = load_model()
-    st.success(f"Model loaded from `{MODEL_PATH}`")
+    st.success("Model loaded successfully")
 except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
@@ -47,13 +48,17 @@ with st.form("prediction_form"):
     inputs = {}
     for key, hint in INPUT_FIELDS:
         if key == "Orientation":
-            inputs[key] = st.text_input(f"{key} – {hint}", "horizontal")
+            inputs[key] = st.text_input(
+                f"{key} – {hint}", "horizontal"
+            ).strip().lower()
         else:
-            inputs[key] = st.number_input(f"{key} – {hint}", value=0.0)
+            inputs[key] = st.number_input(
+                f"{key} – {hint}", value=0.0
+            )
     submitted = st.form_submit_button("Predict Outputs")
 
 if submitted:
-    X = pd.DataFrame([inputs], columns=[f[0] for f in INPUT_FIELDS])
+    X = pd.DataFrame([inputs])
     try:
         preds = model.predict(X)
         pred_dict = dict(zip(OUTPUT_FIELDS, preds[0]))
