@@ -27,7 +27,7 @@ OUTPUT_FIELDS = [
 ]
 
 st.set_page_config(page_title="Civil Lightweight Aggregate Predictor", layout="centered")
-st.title("Civil Lightweight Aggregate – AI Predictor")
+st.title("PCM Impregnated Light weight Aggregate Concrete")
 
 @st.cache_resource
 def load_model():
@@ -69,3 +69,4 @@ if submitted:
         st.error("The loaded model is not fitted.")
     except Exception as e:
         st.error(f"Prediction failed: {e}")
+
